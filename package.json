@@ -1,0 +1,48 @@
+{
+  "name": "read-data",
+  "description": "Utils for reading JSON and YAML data files.",
+  "version": "0.1.1",
+  "homepage": "https://github.com/jonschlinkert/read-data",
+  "author": {
+    "name": "Jon Schlinkert",
+    "url": "https://github.com/jonschlinkert"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jonschlinkert/read-data.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jonschlinkert/read-data/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/jonschlinkert/read-data/blob/master/LICENSE-MIT"
+    }
+  ],
+  "keywords": [
+    "docs",
+    "documentation",
+    "generate",
+    "generator",
+    "markdown",
+    "templates",
+    "verb"
+  ],
+  "main": "index.js",
+  "engines": {
+    "node": ">=0.8"
+  },
+  "scripts": {
+    "test": "mocha -R test"
+  },
+  "devDependencies": {
+    "verb": "~0.2.0",
+    "chai": "~1.9.1"
+  },
+  "dependencies": {
+    "async": "~0.7.0",
+    "graceful-fs": "~2.0.3",
+    "js-yaml": "~3.0.2"
+  }
+}
