@@ -1,7 +1,7 @@
 {
   "name": "read-data",
   "description": "Utils for reading JSON and YAML data files.",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "homepage": "https://github.com/jonschlinkert/read-data",
   "author": {
     "name": "Jon Schlinkert",
@@ -18,28 +18,30 @@
     "type": "MIT",
     "url": "https://github.com/jonschlinkert/read-data/blob/master/LICENSE"
   },
+  "files": [
+    "index.js"
+  ],
   "scripts": {
     "test": "mocha"
   },
   "dependencies": {
-    "graceful-fs": "^3.0.6",
-    "read-yaml": "^1.0.0",
-    "run-waterfall": "^1.1.0"
+    "read-yaml": "^1.0.0"
+  },
+  "devDependencies": {
+    "js-yaml": "^3.2.7",
+    "mocha": "^2.2.1",
+    "should": "^5.2.0"
   },
   "keywords": [
     "async",
     "data",
     "file",
+    "fs",
     "json",
     "read",
+    "reader",
     "sync",
-    "utility",
-    "utils",
+    "system",
     "yaml"
-  ],
-  "devDependencies": {
-    "js-yaml": "^3.2.7",
-    "mocha": "^2.2.1",
-    "should": "^5.2.0"
-  }
+  ]
 }
