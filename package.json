@@ -1,6 +1,6 @@
 {
   "name": "read-data",
-  "description": "Utils for reading JSON and YAML data files.",
+  "description": "Read JSON or YAML files.",
   "version": "0.3.0",
   "homepage": "https://github.com/jonschlinkert/read-data",
   "author": {
