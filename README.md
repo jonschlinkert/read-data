@@ -1,108 +1,156 @@
-# read-data [![NPM version](https://badge.fury.io/js/read-data.png)](http://badge.fury.io/js/read-data)
+# read-data [![NPM version](https://badge.fury.io/js/read-data.svg)](http://badge.fury.io/js/read-data)  [![Build Status](https://travis-ci.org/jonschlinkert/read-data.svg)](https://travis-ci.org/jonschlinkert/read-data) 
 
 > Utils for reading JSON and YAML data files.
 
-## Install
-Install with [npm](npmjs.org):
+## Install with [npm](npmjs.org)
 
 ```bash
 npm i read-data --save
 ```
 
+## API
+### [.readJSON](./index.js#L35)
 
-## api
-### JSON
+Read JSON file asynchronously and parse content as JSON
 
-#### readJSON
+* `filepath` **{String}**: path of the file to read.    
+* `callback` **{Function}**: callback function    
+* `returns` **{Object}**: JSON  
 
-Read JSON files asynchronously.
-
-```js
-var file = require('read-data');
-file.readJSON('foo.json', callback);
-```
-
-#### readJSONSync
-
-Read JSON files synchronously.
+**Example:**
 
 ```js
 var file = require('read-data');
-file.readJSONSync('foo.json');
+
+file.readJSON('config.json', function(err, data) {
+  if (err) throw err;
+  console.log(data);
+});
 ```
 
+### [.readJSONSync](./index.js#L69)
 
-### YAML
+Read JSON file synchronously and parse content as JSON
 
-#### readYAML
+* `filepath` **{String}**: path of the file to read.    
+* `returns` **{Object}**: JSON  
 
-Read YAML files asynchronously.
+**Example:**
 
 ```js
 var file = require('read-data');
-file.readYAML('foo.yaml', callback);
+
+var config = file.readJSONSync('config.json');
 ```
 
-#### readYAMLSync
+### [.readYAML](./index.js#L99)
 
-Read YAML files synchronously.
+Read YAML file asynchronously and parse content as JSON
+
+* `filepath` **{String}**: path of the file to read.    
+* `options` **{Object|String}**: to pass to [js-yaml]    
+* `cb` **{Function}**: callback function    
+* `returns` **{Object}**: JSON  
+
+**Example:**
 
 ```js
 var file = require('read-data');
-file.readYAMLSync('foo.yaml');
+
+file.readYAML('config.yml', function(err, data) {
+  if (err) throw err;
+  console.log(data);
+});
 ```
 
+### [.readYAMLSync](./index.js#L119)
 
-### Data (automatic)
+Read YAML file synchronously and parse content as JSON
 
-Automatically read a JSON or YAML data file based on its file extension.
+* `filepath` **{String}**: path of the file to read.    
+* `options` **{Object|String}**: to pass to [js-yaml]    
+* `returns` **{Object}**: JSON  
 
-#### readData
-
-Read JSON or YAML files asynchronously.
+**Example:**
 
 ```js
 var file = require('read-data');
-file.readData('foo.json', callback);
-file.readData('foo.yml', callback);
+
+var config = file.readYAMLSync('config.yml');
+var config = file.readYAML.sync('config.yml');
+var config = file.readYaml.sync('config.yml');
 ```
 
-#### readDataSync
+### [.readData](./index.js#L147)
 
-Read JSON or YAML files synchronously.
+Determine the reader based on extension, asynchronously
+
+* `filepath` **{String}**: path of the file to read.    
+* `options` **{Object|String}**: to pass to [js-yaml]    
+* `cb` **{Function}**: callback function    
+* `returns` **{Object}**: JSON  
+
+**Example:**
 
 ```js
 var file = require('read-data');
-file.readDataSync('foo.json');
-file.readDataSync('foo.yml');
+
+file.readData('config.json', function(err, data) {
+  if (err) throw err;
+  console.log(data);
+});
+
+file.readData('config.yml', function(err, data) {
+  if (err) throw err;
+  console.log(data);
+});
 ```
 
-#### lang
+### [.readDataSync](./index.js#L184)
 
-With the `readData` methods, you can also explicitly set the language to read by passing a `lang` option as a second parameter.
+Determine the reader based on extension, synchronously
+
+* `filepath` **{String}**: path of the file to read.    
+* `options` **{Object|String}**: to pass to [js-yaml]    
+* `returns` **{Object}**: JSON  
+
+**Example:**
 
 ```js
-file.readDataSync('foo.json', {lang: 'json'});
+var file = require('read-data');
+
+var configYAML = file.readDataSync('config.yml');
+var configJSON = file.readDataSync('config.json');
 ```
 
-This is useful if you need to set this value dynamically.
+### [.readOptionalJSON](./index.js#L207)
 
-## Authors
+* `filepath` **{String}**: path of the file to read.    
+* `returns` **{Object}**: JSON  
+
+[Read optional](https://gist.github.com/2876125) JSON by Ben Alman
+
+### [.readOptionalYAML](./index.js#L223)
+
+* `filepath` **{String}**: path of the file to read.    
+* `options` **{Object|String}**: to pass to [js-yaml]    
+* `returns` **{Object}**: JSON  
+
+[Read optional](https://gist.github.com/2876125) YAML by Ben Alman
+
+## Author
 
 **Jon Schlinkert**
-
+ 
 + [github/jonschlinkert](https://github.com/jonschlinkert)
-+ [twitter/jonschlinkert](http://twitter.com/jonschlinkert)
-
-**Brian Woodward**
-
-+ [github/doowb](https://github.com/doowb)
-+ [twitter/doowb](http://twitter.com/jonschlinkert)
++ [twitter/jonschlinkert](http://twitter.com/jonschlinkert) 
 
 ## License
-Copyright (c) 2014 Jon Schlinkert, contributors.  
+Copyright (c) 2014-2015 Jon Schlinkert  
 Released under the MIT license
 
 ***
 
-_This file was generated by [verb-cli](https://github.com/assemble/verb-cli) on April 09, 2014._
+_This file was generated by [verb-cli](https://github.com/assemble/verb-cli) on March 31, 2015._
+
+[js-yaml]: https://github.com/nodeca/js-yaml
