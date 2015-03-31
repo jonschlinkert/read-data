@@ -1,5 +1,6 @@
 {
 	"foo": {
-		"bar": "baz"
+		"bar": "baz",
+    "qux": true
 	}
 }
