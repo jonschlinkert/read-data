@@ -1,6 +1,6 @@
 # read-data [![NPM version](https://badge.fury.io/js/read-data.svg)](http://badge.fury.io/js/read-data)  [![Build Status](https://travis-ci.org/jonschlinkert/read-data.svg)](https://travis-ci.org/jonschlinkert/read-data) 
 
-> Utils for reading JSON and YAML data files.
+> Read JSON or YAML files.
 
 ## Install with [npm](npmjs.org)
 
@@ -9,7 +9,7 @@ npm i read-data --save
 ```
 
 ## API
-### [.yaml](./index.js#L33)
+### [.yaml](./index.js#L34)
 
 Asynchronously read a YAML file.
 
@@ -27,12 +27,20 @@ yaml('foo.yml', function(err, data) {
 });
 ```
 
+### [.yaml.sync](./index.js#L51)
+
+Synchronously read a YAML file.
+
+* `fp` **{String}**: path of the file to read.    
+* `options` **{Object|String}**: to pass to [js-yaml]    
+* `returns` **{Object}**: JSON  
+
 ```js
 var yaml = require('read-data').yaml;
 var data = yaml.sync('foo.yml');
 ```
 
-### [json](./index.js#L69)
+### [.json](./index.js#L72)
 
 Asynchronously read a JSON file.
 
@@ -49,7 +57,7 @@ json('foo.json', function(err, data) {
 });
 ```
 
-### [.sync](./index.js#L94)
+### [.json.sync](./index.js#L98)
 
 Synchronously read a JSON file.
 
@@ -61,7 +69,7 @@ var json = require('read-data').json;
 var data = json.sync('foo.json');
 ```
 
-### [data](./index.js#L128)
+### [.data](./index.js#L133)
 
 Asynchronously read a JSON or YAML file, automatically determining the reader based on extension.
 
@@ -84,19 +92,19 @@ read('foo.yml', function(err, data) {
 });
 ```
 
-### [.sync](./index.js#L165)
+### [.data.sync](./index.js#L171)
 
-Synchronously read a data file, and automatically determine the reader based on extension.
+Synchronously read a data file, automatically determining the reader based on extension.
 
 * `fp` **{String}**: path of the file to read.    
 * `options` **{Object|String}**: to pass to [js-yaml]    
 * `returns` **{Object}**: JSON  
 
 ```js
-var read = require('read-data');
+var data = require('read-data').data;
 
-var yaml = read('foo.yml');
-var json = read('foo.json');
+var yaml = data.sync('foo.yml');
+var json = data.sync('foo.json');
 ```
 
 ## Related projects
