@@ -5,224 +5,185 @@
  * Licensed under the MIT License.
  */
 
-var path = require('path');
-var fs = require('graceful-fs');
-var waterfall = require('run-waterfall');
-var yaml = require('read-yaml');
-var file = module.exports = {};
+'use strict';
 
+var fs = require('fs');
+var path = require('path');
+var yaml = require('read-yaml');
 
 /**
- * Read JSON file asynchronously and parse content as JSON
- *
- * **Example:**
+ * Asynchronously read a YAML file.
  *
  * ```js
- * var file = require('read-data');
+ * var yaml = require('read-data').yaml;
  *
- * file.readJSON('config.json', function(err, data) {
+ * yaml('foo.yml', function(err, data) {
  *   if (err) throw err;
  *   console.log(data);
  * });
  * ```
  *
- * @param {String} `filepath` path of the file to read.
+ * @param {String} `fp` path of the file to read.
+ * @param {Object|String} `options` to pass to [js-yaml]
+ * @param {Function} `cb` callback function
+ * @return {Object} JSON
+ * @api public
+ */
+
+exports.yaml = yaml;
+
+/**
+ * Synchronously read a YAML file.
+ *
+ * ```js
+ * var yaml = require('read-data').yaml;
+ * var data = yaml.sync('foo.yml');
+ * ```
+ *
+ * @param {String} `fp` path of the file to read.
+ * @param {Object|String} `options` to pass to [js-yaml]
+ * @return {Object} JSON
+ * @api public
+ */
+
+exports.yaml.sync = yaml.sync;
+
+/**
+ * Asynchronously read a JSON file.
+ *
+ * ```js
+ * var json = require('read-data');
+ *
+ * json('foo.json', function(err, data) {
+ *   if (err) throw err;
+ *   console.log(data);
+ * });
+ * ```
+ *
+ * @param {String} `fp` path of the file to read.
  * @param {Function} `callback` callback function
  * @return {Object} JSON
  * @api public
  */
-file.readJSON = function _readJSON(filepath, options, callback) {
-  if (typeof options === 'function') {
-    callback = options;
-    options = {};
+
+function json(fp, opts, cb) {
+  if (typeof opts === 'function') {
+    cb = opts; opts = {};
   }
-  waterfall([
-    function (next) { fs.readFile(filepath, 'utf8', next); },
-    function (contents, next) {
-      try {
-        next(null, JSON.parse(contents));
-      } catch (err) {
-        err.message = 'Failed to parse "' + filepath + '": ' + err.message;
-        next(err);
-      }
-    }
-  ],
-  callback);
-};
+  // opts param exists to maintain the same arity as the
+  // yaml method, so we can dynamically choose the reader
+  fs.readFile(fp, 'utf8', function (err, data) {
+    if (err) cb(err);
+    cb(null, JSON.parse(data));
+  });
+}
 
 /**
- * Read JSON file synchronously and parse content as JSON
- *
- * **Example:**
+ * Synchronously read a JSON file.
  *
  * ```js
- * var file = require('read-data');
- *
- * var config = file.readJSONSync('config.json');
+ * var json = require('read-data').json;
+ * var data = json.sync('foo.json');
  * ```
  *
- * @param {String} `filepath` path of the file to read.
+ * @param {String} `fp` path of the file to read.
  * @return {Object} JSON
  * @api public
  */
-file.readJSONSync = function _readJSONSync(filepath) {
-  var buffer = fs.readFileSync(filepath).toString();
+
+json.sync = function jsonSync(fp) {
   try {
-    return JSON.parse(buffer);
+    return JSON.parse(fs.readFileSync(fp, 'utf8'));
   } catch (err) {
-    err.message = 'Failed to parse "' + filepath + '": ' + err.message;
+    err.message = 'read-data failed to parse "' + fp + '": ' + err.message;
     throw err;
   }
 };
 
 /**
- * Read YAML file asynchronously and parse content as JSON
- *
- * **Example:**
+ * Asynchronously read a JSON or YAML file, automatically determining the
+ * reader based on extension.
  *
  * ```js
- * var file = require('read-data');
+ * var read = require('read-data');
  *
- * file.readYAML('config.yml', function(err, data) {
+ * read('foo.json', function(err, data) {
+ *   if (err) throw err;
+ *   console.log(data);
+ * });
+ *
+ * read('foo.yml', function(err, data) {
  *   if (err) throw err;
  *   console.log(data);
  * });
  * ```
  *
- * @param {String} `filepath` path of the file to read.
+ * @param {String} `fp` path of the file to read.
  * @param {Object|String} `options` to pass to [js-yaml]
  * @param {Function} `cb` callback function
  * @return {Object} JSON
  * @api public
  */
-file.readYAML = file.readYaml = yaml;
 
-/**
- * Read YAML file synchronously and parse content as JSON
- *
- * **Example:**
- *
- * ```js
- * var file = require('read-data');
- *
- * var config = file.readYAMLSync('config.yml');
- * var config = file.readYAML.sync('config.yml');
- * var config = file.readYaml.sync('config.yml');
- * ```
- *
- * @param {String} `filepath` path of the file to read.
- * @param {Object|String} `options` to pass to [js-yaml]
- * @return {Object} JSON
- * @api public
- */
-file.readYAML.sync = file.readYaml.sync = yaml.sync;
-file.readYAMLSync = file.readYamlSync = yaml.sync;
-
-/**
- * Determine the reader based on extension, asynchronously
- *
- * **Example:**
- *
- * ```js
- * var file = require('read-data');
- *
- * file.readData('config.json', function(err, data) {
- *   if (err) throw err;
- *   console.log(data);
- * });
- *
- * file.readData('config.yml', function(err, data) {
- *   if (err) throw err;
- *   console.log(data);
- * });
- * ```
- *
- * @param {String} `filepath` path of the file to read.
- * @param {Object|String} `options` to pass to [js-yaml]
- * @param {Function} `cb` callback function
- * @return {Object} JSON
- * @api public
- */
-file.readData = function _readData(filepath, options, callback) {
-  if (options && typeof options === 'function') {
-    callback = options;
-    options = {};
+function data(fp, opts, cb) {
+  if (opts && typeof opts === 'function') {
+    cb = opts;
+    opts = {};
   }
-
-  var ext = options.lang || path.extname(filepath).replace(/\./, '');
-  var reader = file.readJSON;
+  opts = opts || {};
+  var ext = opts.lang || path.extname(fp);
+  var reader = json;
   switch (ext) {
-    case 'json':
-      reader = file.readJSON;
+    case '.json':
+      reader = json;
       break;
-    case 'yml':
-    case 'yaml':
-      reader = file.readYAML;
+    case '.yml':
+    case '.yaml':
+      reader = yaml;
       break;
   }
-  reader(filepath, options, callback);
-};
+  reader(fp, opts, cb);
+}
 
 /**
- * Determine the reader based on extension, synchronously
- *
- * **Example:**
+ * Synchronously read a data file, and automatically determine the
+ * reader based on extension.
  *
  * ```js
- * var file = require('read-data');
+ * var read = require('read-data');
  *
- * var configYAML = file.readDataSync('config.yml');
- * var configJSON = file.readDataSync('config.json');
+ * var yaml = read('foo.yml');
+ * var json = read('foo.json');
  * ```
  *
- * @param {String} `filepath` path of the file to read.
+ * @param {String} `fp` path of the file to read.
  * @param {Object|String} `options` to pass to [js-yaml]
  * @return {Object} JSON
  * @api public
  */
-file.readDataSync = function _readDataSync(filepath, options) {
-  options = options || {};
-  var ext = options.lang || path.extname(filepath).replace(/\./, '');
-  var reader = file.readJSONSync;
+
+data.sync = function dataSync(fp, opts) {
+  opts = opts || {};
+  var ext = opts.lang || path.extname(fp);
+  var reader = json.sync;
   switch(ext) {
-    case 'json':
-      reader = file.readJSONSync;
+    case '.json':
+      reader = json.sync;
       break;
-    case 'yml':
-    case 'yaml':
-      reader = file.readYAMLSync;
+    case '.yml':
+    case '.yaml':
+      reader = yaml.sync;
       break;
   }
-  return reader(filepath, options);
+  return reader(fp, opts);
 };
 
 /**
- * [Read optional](https://gist.github.com/2876125) JSON by Ben Alman
- *
- * @param {String} `filepath` path of the file to read.
- * @return {Object} JSON
- * @api public
+ * expose methods
  */
-file.readOptionalJSON = function _readOptionalJSON(filepath) {
-  var buffer = {};
-  try {
-    buffer = file.readJSONSync(filepath);
-  } catch (e) {}
-  return buffer;
-};
 
-/**
- * [Read optional](https://gist.github.com/2876125) YAML by Ben Alman
- *
- * @param {String} `filepath` path of the file to read.
- * @param {Object|String} `options` to pass to [js-yaml]
- * @return {Object} JSON
- * @api public
- */
-file.readOptionalYAML = function _readOptionalYAML(filepath, options) {
-  var buffer = {};
-  try {
-    buffer = file.readYAMLSync(filepath, options);
-  } catch (e) {}
-  return buffer;
+module.exports = {
+  data: data,
+  json: json,
+  yaml: yaml,
 };
