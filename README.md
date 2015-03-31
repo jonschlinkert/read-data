@@ -9,148 +9,127 @@ npm i read-data --save
 ```
 
 ## API
-### [.readJSON](./index.js#L35)
+### [.yaml](./index.js#L33)
 
-Read JSON file asynchronously and parse content as JSON
+Asynchronously read a YAML file.
 
-* `filepath` **{String}**: path of the file to read.    
+* `fp` **{String}**: path of the file to read.    
+* `options` **{Object|String}**: to pass to [js-yaml]    
+* `cb` **{Function}**: callback function    
+* `returns` **{Object}**: JSON  
+
+```js
+var yaml = require('read-data').yaml;
+
+yaml('foo.yml', function(err, data) {
+  if (err) throw err;
+  console.log(data);
+});
+```
+
+```js
+var yaml = require('read-data').yaml;
+var data = yaml.sync('foo.yml');
+```
+
+### [json](./index.js#L69)
+
+Asynchronously read a JSON file.
+
+* `fp` **{String}**: path of the file to read.    
 * `callback` **{Function}**: callback function    
 * `returns` **{Object}**: JSON  
 
-**Example:**
-
 ```js
-var file = require('read-data');
+var json = require('read-data');
 
-file.readJSON('config.json', function(err, data) {
+json('foo.json', function(err, data) {
   if (err) throw err;
   console.log(data);
 });
 ```
 
-### [.readJSONSync](./index.js#L69)
+### [.sync](./index.js#L94)
 
-Read JSON file synchronously and parse content as JSON
+Synchronously read a JSON file.
 
-* `filepath` **{String}**: path of the file to read.    
+* `fp` **{String}**: path of the file to read.    
 * `returns` **{Object}**: JSON  
 
-**Example:**
-
 ```js
-var file = require('read-data');
-
-var config = file.readJSONSync('config.json');
+var json = require('read-data').json;
+var data = json.sync('foo.json');
 ```
 
-### [.readYAML](./index.js#L99)
+### [data](./index.js#L128)
 
-Read YAML file asynchronously and parse content as JSON
+Asynchronously read a JSON or YAML file, automatically determining the reader based on extension.
 
-* `filepath` **{String}**: path of the file to read.    
+* `fp` **{String}**: path of the file to read.    
 * `options` **{Object|String}**: to pass to [js-yaml]    
 * `cb` **{Function}**: callback function    
 * `returns` **{Object}**: JSON  
 
-**Example:**
-
 ```js
-var file = require('read-data');
+var read = require('read-data');
 
-file.readYAML('config.yml', function(err, data) {
+read('foo.json', function(err, data) {
+  if (err) throw err;
+  console.log(data);
+});
+
+read('foo.yml', function(err, data) {
   if (err) throw err;
   console.log(data);
 });
 ```
 
-### [.readYAMLSync](./index.js#L119)
+### [.sync](./index.js#L165)
 
-Read YAML file synchronously and parse content as JSON
+Synchronously read a data file, and automatically determine the reader based on extension.
 
-* `filepath` **{String}**: path of the file to read.    
+* `fp` **{String}**: path of the file to read.    
 * `options` **{Object|String}**: to pass to [js-yaml]    
 * `returns` **{Object}**: JSON  
-
-**Example:**
 
 ```js
-var file = require('read-data');
+var read = require('read-data');
 
-var config = file.readYAMLSync('config.yml');
-var config = file.readYAML.sync('config.yml');
-var config = file.readYaml.sync('config.yml');
+var yaml = read('foo.yml');
+var json = read('foo.json');
 ```
 
-### [.readData](./index.js#L147)
+## Related projects
+ * [read-yaml](https://github.com/jonschlinkert/read-yaml): Very thin wrapper around js-yaml for directly reading in YAML files.
+ * [map-files](https://github.com/jonschlinkert/map-files): Return an object for a glob of files. Pass a `rename` function for the keys, or a `parse` function for the content, allowing it to be used for readable or require-able files.
+ * [data-store](https://github.com/jonschlinkert/data-store): Easily get, set and persist config data.
+ * [write-json](https://github.com/jonschlinkert/write-json): Write a JSON to file disk, also creates directories in the dest path if they don't already exist.
+ * [write-yaml](https://github.com/jonschlinkert/write-yaml): Write YAML. Converts JSON to YAML writes it to the specified file.
+ * [plasma](https://github.com/jonschlinkert/plasma): Load data from globs or files or directly from objects.  
 
-Determine the reader based on extension, asynchronously
+## Running tests
+Install dev dependencies:
 
-* `filepath` **{String}**: path of the file to read.    
-* `options` **{Object|String}**: to pass to [js-yaml]    
-* `cb` **{Function}**: callback function    
-* `returns` **{Object}**: JSON  
-
-**Example:**
-
-```js
-var file = require('read-data');
-
-file.readData('config.json', function(err, data) {
-  if (err) throw err;
-  console.log(data);
-});
-
-file.readData('config.yml', function(err, data) {
-  if (err) throw err;
-  console.log(data);
-});
+```bash
+npm i -d && npm test
 ```
 
-### [.readDataSync](./index.js#L184)
-
-Determine the reader based on extension, synchronously
-
-* `filepath` **{String}**: path of the file to read.    
-* `options` **{Object|String}**: to pass to [js-yaml]    
-* `returns` **{Object}**: JSON  
-
-**Example:**
-
-```js
-var file = require('read-data');
-
-var configYAML = file.readDataSync('config.yml');
-var configJSON = file.readDataSync('config.json');
-```
-
-### [.readOptionalJSON](./index.js#L207)
-
-* `filepath` **{String}**: path of the file to read.    
-* `returns` **{Object}**: JSON  
-
-[Read optional](https://gist.github.com/2876125) JSON by Ben Alman
-
-### [.readOptionalYAML](./index.js#L223)
-
-* `filepath` **{String}**: path of the file to read.    
-* `options` **{Object|String}**: to pass to [js-yaml]    
-* `returns` **{Object}**: JSON  
-
-[Read optional](https://gist.github.com/2876125) YAML by Ben Alman
+## Contributing
+Pull requests and stars are always welcome. For bugs and feature requests, [please create an issue](https://github.com/jonschlinkert/read-data/issues)
 
 ## Author
 
 **Jon Schlinkert**
- 
+
 + [github/jonschlinkert](https://github.com/jonschlinkert)
 + [twitter/jonschlinkert](http://twitter.com/jonschlinkert) 
 
 ## License
-Copyright (c) 2014-2015 Jon Schlinkert  
+Copyright (c) 2015 Jon Schlinkert  
 Released under the MIT license
 
 ***
 
 _This file was generated by [verb-cli](https://github.com/assemble/verb-cli) on March 31, 2015._
 
-[js-yaml]: https://github.com/nodeca/js-yaml
+[read-yaml]: https://github.com/jonschlinkert/read-yaml
