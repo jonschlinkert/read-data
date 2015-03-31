@@ -23,6 +23,7 @@ var yaml = require('read-yaml');
  * });
  * ```
  *
+ * @name .yaml
  * @param {String} `fp` path of the file to read.
  * @param {Object|String} `options` to pass to [js-yaml]
  * @param {Function} `cb` callback function
@@ -40,6 +41,7 @@ exports.yaml = yaml;
  * var data = yaml.sync('foo.yml');
  * ```
  *
+ * @name ..yaml.sync
  * @param {String} `fp` path of the file to read.
  * @param {Object|String} `options` to pass to [js-yaml]
  * @return {Object} JSON
@@ -60,13 +62,14 @@ exports.yaml.sync = yaml.sync;
  * });
  * ```
  *
+ * @name .json
  * @param {String} `fp` path of the file to read.
  * @param {Function} `callback` callback function
  * @return {Object} JSON
  * @api public
  */
 
-function json(fp, opts, cb) {
+exports.json = function json(fp, opts, cb) {
   if (typeof opts === 'function') {
     cb = opts; opts = {};
   }
@@ -76,7 +79,7 @@ function json(fp, opts, cb) {
     if (err) cb(err);
     cb(null, JSON.parse(data));
   });
-}
+};
 
 /**
  * Synchronously read a JSON file.
@@ -86,12 +89,13 @@ function json(fp, opts, cb) {
  * var data = json.sync('foo.json');
  * ```
  *
+ * @name .json.sync
  * @param {String} `fp` path of the file to read.
  * @return {Object} JSON
  * @api public
  */
 
-json.sync = function jsonSync(fp) {
+exports.json.sync = function jsonSync(fp) {
   try {
     return JSON.parse(fs.readFileSync(fp, 'utf8'));
   } catch (err) {
@@ -118,6 +122,7 @@ json.sync = function jsonSync(fp) {
  * });
  * ```
  *
+ * @name .data
  * @param {String} `fp` path of the file to read.
  * @param {Object|String} `options` to pass to [js-yaml]
  * @param {Function} `cb` callback function
@@ -125,65 +130,56 @@ json.sync = function jsonSync(fp) {
  * @api public
  */
 
-function data(fp, opts, cb) {
+exports.data = function data(fp, opts, cb) {
   if (opts && typeof opts === 'function') {
     cb = opts;
     opts = {};
   }
   opts = opts || {};
   var ext = opts.lang || path.extname(fp);
-  var reader = json;
+  var reader = exports.json;
   switch (ext) {
     case '.json':
-      reader = json;
+      reader = exports.json;
       break;
     case '.yml':
     case '.yaml':
-      reader = yaml;
+      reader = exports.yaml;
       break;
   }
   reader(fp, opts, cb);
-}
+};
 
 /**
- * Synchronously read a data file, and automatically determine the
+ * Synchronously read a data file, automatically determining the
  * reader based on extension.
  *
  * ```js
- * var read = require('read-data');
+ * var data = require('read-data').data;
  *
- * var yaml = read('foo.yml');
- * var json = read('foo.json');
+ * var yaml = data.sync('foo.yml');
+ * var json = data.sync('foo.json');
  * ```
  *
+ * @name .data.sync
  * @param {String} `fp` path of the file to read.
  * @param {Object|String} `options` to pass to [js-yaml]
  * @return {Object} JSON
  * @api public
  */
 
-data.sync = function dataSync(fp, opts) {
+exports.data.sync = function dataSync(fp, opts) {
   opts = opts || {};
   var ext = opts.lang || path.extname(fp);
-  var reader = json.sync;
+  var reader = exports.json.sync;
   switch(ext) {
     case '.json':
-      reader = json.sync;
+      reader = exports.json.sync;
       break;
     case '.yml':
     case '.yaml':
-      reader = yaml.sync;
+      reader = exports.yaml.sync;
       break;
   }
   return reader(fp, opts);
-};
-
-/**
- * expose methods
- */
-
-module.exports = {
-  data: data,
-  json: json,
-  yaml: yaml,
 };
