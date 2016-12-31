@@ -1,36 +1,32 @@
 {
   "name": "read-data",
   "description": "Read JSON or YAML files.",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "homepage": "https://github.com/jonschlinkert/read-data",
-  "author": {
-    "name": "Jon Schlinkert",
-    "url": "http://github.com/jonschlinkert"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/jonschlinkert/read-data.git"
-  },
+  "author": "Jon Schlinkert (http://github.com/jonschlinkert)",
+  "repository": "jonschlinkert/read-data",
   "bugs": {
     "url": "https://github.com/jonschlinkert/read-data/issues"
   },
-  "license": {
-    "type": "MIT",
-    "url": "https://github.com/jonschlinkert/read-data/blob/master/LICENSE"
-  },
+  "license": "MIT",
   "files": [
     "index.js"
   ],
+  "main": "index.js",
+  "engines": {
+    "node": ">= 0.10.0"
+  },
   "scripts": {
     "test": "mocha"
   },
   "dependencies": {
+    "extend-shallow": "^2.0.1",
     "read-yaml": "^1.0.0"
   },
   "devDependencies": {
-    "js-yaml": "^3.2.7",
-    "mocha": "^2.2.1",
-    "should": "^5.2.0"
+    "gulp-format-md": "^0.1.11",
+    "js-yaml": "^3.7.0",
+    "mocha": "^3.2.0"
   },
   "keywords": [
     "async",
@@ -43,5 +39,26 @@
     "sync",
     "system",
     "yaml"
-  ]
+  ],
+  "verb": {
+    "toc": false,
+    "layout": "default",
+    "tasks": [
+      "readme"
+    ],
+    "plugins": [
+      "gulp-format-md"
+    ],
+    "lint": {
+      "reflinks": true
+    },
+    "related": {
+      "list": []
+    },
+    "reflinks": [
+      "js-yaml",
+      "verb",
+      "verb-generate-readme"
+    ]
+  }
 }
