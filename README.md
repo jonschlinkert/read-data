@@ -1,82 +1,51 @@
-# read-data [![NPM version](https://badge.fury.io/js/read-data.svg)](http://badge.fury.io/js/read-data)  [![Build Status](https://travis-ci.org/jonschlinkert/read-data.svg)](https://travis-ci.org/jonschlinkert/read-data) 
+# read-data [![NPM version](https://img.shields.io/npm/v/read-data.svg?style=flat)](https://www.npmjs.com/package/read-data) [![NPM monthly downloads](https://img.shields.io/npm/dm/read-data.svg?style=flat)](https://npmjs.org/package/read-data)  [![NPM total downloads](https://img.shields.io/npm/dt/read-data.svg?style=flat)](https://npmjs.org/package/read-data) [![Linux Build Status](https://img.shields.io/travis/jonschlinkert/read-data.svg?style=flat&label=Travis)](https://travis-ci.org/jonschlinkert/read-data)
 
 > Read JSON or YAML files.
 
-## Install with [npm](npmjs.org)
+## Install
 
-```bash
-npm i read-data --save
+Install with [npm](https://www.npmjs.com/):
+
+```sh
+$ npm install --save read-data
+```
+
+**Heads up!**
+
+Please read the [release history](#history), there were breaking changes in 1.0.0!
+
+## Usage
+
+```js
+var read = require('read-data');
+
+// sync
+console.log(read.sync('foo.yml'));
+console.log(read.sync('foo.yaml'));
+console.log(read.sync('foo.json'));
+
+// async
+read('foo.yml', function(err, data) {
+  if (err) return console.log(err);
+  console.log(data);
+});
+read('foo.yaml', function(err, data) {
+  if (err) return console.log(err);
+  console.log(data);
+});
+read('foo.json', function(err, data) {
+  if (err) return console.log(err);
+  console.log(data);
+});
 ```
 
 ## API
-### [.yaml](./index.js#L34)
 
-Asynchronously read a YAML file.
-
-* `fp` **{String}**: path of the file to read.    
-* `options` **{Object|String}**: to pass to [js-yaml]    
-* `cb` **{Function}**: callback function    
-* `returns` **{Object}**: JSON  
-
-```js
-var yaml = require('read-data').yaml;
-
-yaml('foo.yml', function(err, data) {
-  if (err) throw err;
-  console.log(data);
-});
-```
-
-### [.yaml.sync](./index.js#L51)
-
-Synchronously read a YAML file.
-
-* `fp` **{String}**: path of the file to read.    
-* `options` **{Object|String}**: to pass to [js-yaml]    
-* `returns` **{Object}**: JSON  
-
-```js
-var yaml = require('read-data').yaml;
-var data = yaml.sync('foo.yml');
-```
-
-### [.json](./index.js#L72)
-
-Asynchronously read a JSON file.
-
-* `fp` **{String}**: path of the file to read.    
-* `callback` **{Function}**: callback function    
-* `returns` **{Object}**: JSON  
-
-```js
-var json = require('read-data');
-
-json('foo.json', function(err, data) {
-  if (err) throw err;
-  console.log(data);
-});
-```
-
-### [.json.sync](./index.js#L98)
-
-Synchronously read a JSON file.
-
-* `fp` **{String}**: path of the file to read.    
-* `returns` **{Object}**: JSON  
-
-```js
-var json = require('read-data').json;
-var data = json.sync('foo.json');
-```
-
-### [.data](./index.js#L133)
+### [read](index.js#L41)
 
 Asynchronously read a JSON or YAML file, automatically determining the reader based on extension.
 
-* `fp` **{String}**: path of the file to read.    
-* `options` **{Object|String}**: to pass to [js-yaml]    
-* `cb` **{Function}**: callback function    
-* `returns` **{Object}**: JSON  
+**Example**
 
 ```js
 var read = require('read-data');
@@ -92,13 +61,18 @@ read('foo.yml', function(err, data) {
 });
 ```
 
-### [.data.sync](./index.js#L171)
+**Params**
 
-Synchronously read a data file, automatically determining the reader based on extension.
+* `filepath` **{String}**: path of the file to read.
+* `options` **{Object|String}**: to pass to [js-yaml](https://github.com/nodeca/js-yaml)
+* `cb` **{Function}**: callback function
+* `returns` **{Object}**: JSON
 
-* `fp` **{String}**: path of the file to read.    
-* `options` **{Object|String}**: to pass to [js-yaml]    
-* `returns` **{Object}**: JSON  
+### [.sync](index.js#L70)
+
+Synchronously read a `.json` or `.(yaml|yml)` file, automatically determining the reader based on extension.
+
+**Example**
 
 ```js
 var data = require('read-data').data;
@@ -107,37 +81,143 @@ var yaml = data.sync('foo.yml');
 var json = data.sync('foo.json');
 ```
 
-## Related projects
- * [read-yaml](https://github.com/jonschlinkert/read-yaml): Very thin wrapper around js-yaml for directly reading in YAML files.
- * [map-files](https://github.com/jonschlinkert/map-files): Return an object for a glob of files. Pass a `rename` function for the keys, or a `parse` function for the content, allowing it to be used for readable or require-able files.
- * [data-store](https://github.com/jonschlinkert/data-store): Easily get, set and persist config data.
- * [write-json](https://github.com/jonschlinkert/write-json): Write a JSON to file disk, also creates directories in the dest path if they don't already exist.
- * [write-yaml](https://github.com/jonschlinkert/write-yaml): Write YAML. Converts JSON to YAML writes it to the specified file.
- * [plasma](https://github.com/jonschlinkert/plasma): Load data from globs or files or directly from objects.  
+**Params**
 
-## Running tests
-Install dev dependencies:
+* `filepath` **{String}**: path of the file to read.
+* `options` **{Object|String}**: to pass to [js-yaml](https://github.com/nodeca/js-yaml)
+* `returns` **{Object}**: JSON
 
-```bash
-npm i -d && npm test
+### [.yaml](index.js#L96)
+
+Asynchronously read a YAML file.
+
+**Example**
+
+```js
+var yaml = require('read-data').yaml;
+
+yaml('foo.yml', function(err, data) {
+  if (err) throw err;
+  console.log(data);
+});
 ```
 
-## Contributing
-Pull requests and stars are always welcome. For bugs and feature requests, [please create an issue](https://github.com/jonschlinkert/read-data/issues)
+**Params**
 
-## Author
+* `filepath` **{String}**: path of the file to read.
+* `options` **{Object|String}**: to pass to [js-yaml](https://github.com/nodeca/js-yaml)
+* `cb` **{Function}**: callback function
+* `returns` **{Object}**: JSON
+
+### [.yaml.sync](index.js#L113)
+
+Synchronously read a YAML file.
+
+**Example**
+
+```js
+var yaml = require('read-data').yaml;
+var data = yaml.sync('foo.yml');
+```
+
+**Params**
+
+* `filepath` **{String}**: path of the file to read.
+* `options` **{Object|String}**: to pass to [js-yaml](https://github.com/nodeca/js-yaml)
+* `returns` **{Object}**: JSON
+
+### [.json](index.js#L134)
+
+Asynchronously read a JSON file.
+
+**Example**
+
+```js
+var json = require('read-data');
+
+json('foo.json', function(err, data) {
+  if (err) throw err;
+  console.log(data);
+});
+```
+
+**Params**
+
+* `filepath` **{String}**: path of the file to read.
+* `callback` **{Function}**: callback function
+* `returns` **{Object}**: JSON
+
+### [.json.sync](index.js#L166)
+
+Synchronously read a JSON file.
+
+**Example**
+
+```js
+var json = require('read-data').json;
+var data = json.sync('foo.json');
+```
+
+**Params**
+
+* `filepath` **{String}**: path of the file to read.
+* `returns` **{Object}**: JSON
+
+## History
+
+### 1.0.0
+
+**Breaking changes**
+
+* The main export is now a function
+* Use `read()` instead of `read.data()`
+* Use `read.sync()` instead of `read.data.sync()`
+
+Everything else is the same.
+
+## About
+
+### Contributing
+
+Pull requests and stars are always welcome. For bugs and feature requests, [please create an issue](../../issues/new).
+
+### Contributors
+
+| **Commits** | **Contributor**<br/> | 
+| --- | --- |
+| 10 | [jonschlinkert](https://github.com/jonschlinkert) |
+| 1 | [tunnckoCore](https://github.com/tunnckoCore) |
+
+### Building docs
+
+_(This document was generated by [verb-generate-readme](https://github.com/verbose/verb-generate-readme) (a [verb](https://github.com/verbose/verb) generator), please don't edit the readme directly. Any changes to the readme must be made in [.verb.md](.verb.md).)_
+
+To generate the readme and API documentation with [verb](https://github.com/verbose/verb):
+
+```sh
+$ npm install -g verb verb-generate-readme && verb
+```
+
+### Running tests
+
+Install dev dependencies:
+
+```sh
+$ npm install -d && npm test
+```
+
+### Author
 
 **Jon Schlinkert**
 
-+ [github/jonschlinkert](https://github.com/jonschlinkert)
-+ [twitter/jonschlinkert](http://twitter.com/jonschlinkert) 
+* [github/jonschlinkert](https://github.com/jonschlinkert)
+* [twitter/jonschlinkert](http://twitter.com/jonschlinkert)
 
-## License
-Copyright (c) 2015 Jon Schlinkert  
-Released under the MIT license
+### License
+
+Copyright © 2016, [Jon Schlinkert](http://github.com/jonschlinkert).
+Released under the [MIT license](LICENSE).
 
 ***
 
-_This file was generated by [verb-cli](https://github.com/assemble/verb-cli) on March 31, 2015._
-
-[read-yaml]: https://github.com/jonschlinkert/read-yaml
+_This file was generated by [verb-generate-readme](https://github.com/verbose/verb-generate-readme), v0.2.1, on December 30, 2016._
